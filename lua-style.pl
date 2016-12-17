@@ -12,15 +12,15 @@ my $count = 0;
 our $err = 0;
 
 for my $file (@ARGV) {
-	$infile = $file;
+    $infile = $file;
 
-	open my $in, $infile or die $!;
+    open my $in, $infile or die $!;
     print "checking $infile...\n";
-	$lineno = 0;
+    $lineno = 0;
 
-	my $level = 0;
+    my $level = 0;
 
-	while (<$in>){
+    while (<$in>){
 		$line = $_;
 
 		$lineno++;
