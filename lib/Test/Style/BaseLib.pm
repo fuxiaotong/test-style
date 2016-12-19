@@ -84,12 +84,13 @@ sub run_block($) {
 
     # print $out;
     if ($out =~ /ALL SUCCESS/) {
-        $out = "pass\n";
+        $out = "validation passed";
     }
-    if (defined $block->verify) {
-        is $out, $block->verify, "$name - stdout eq okay";
-    }
+    # if (defined $block->verify) {
+    #     is $out, $block->verify, "$name - stdout eq okay";
+    # }
 
+    is $out, "validation passed", "$name - stdout eq okay";
 }
 
 

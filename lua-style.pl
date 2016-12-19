@@ -9,13 +9,16 @@ sub CommonMessage(@);
 my ($infile, $lineno, $line, $line_1, $line_2, $line_3);
 my $line_end = 0;
 my $count = 0;
+my $comment = "--";
+my @arr_spl;
+my $space;
 our $err = 0;
 
 for my $file (@ARGV) {
     $infile = $file;
 
     open my $in, $infile or die $!;
-    print "checking $infile...\n";
+    # print "checking $infile...\n";
     $lineno = 0;
 
     my $level = 0;
@@ -26,49 +29,64 @@ for my $file (@ARGV) {
 		$lineno++;
 
         # detect the commentary. BTW "\S" will match the symbol '-' which is the last character of "--".
-        if($line =~ /.*(\s*)(-(?=-))(\S?)(\s*).*/){
+        if($line =~ /.*(\s*)(-(?=-))(\S*)(\s*).*/){
+           
             if(length($4) != 1){
-                Message("-> NO.$lineno: code >>> ",
-                    "$line",
+                 Message("-> NO.$lineno: code >>> ",
+                     "$line",
+                    " annotate style error:it should place a space after --\n"
+                    );
+                   
+                $space = " " x length($4);
+                # $line =~ s/$space/ /;
+            }
+
+            if ($line =~ /--(\S)/) {
+                # $line =~ s/--/-- /;
+                 Message("-> NO.$lineno: code >>> ",
+                     "$line",
                     " annotate style error:it should place a space after --\n"
                     );
             }
-            my @arr_spl = split(/--/, $line);  # split the string and put the string before "--" into $line.
+
+            # split the string and set the string before "--" into $line.
+            @arr_spl = split(/--/, $line);  
+            
             $line = $arr_spl[0];
-            # print($line)
+            $comment = $arr_spl[1];
         }
 
         # 检查逗号左边是否有0个空格，右边是否有1个空格
         if($line =~ /\(.+( *),( *).+\)/){
             if(length($1) != 0 || length($2) != 1 ){
-                Message("-> NO.$lineno: code >>> ",
-                    "$line",
-                    " space error on both sides of the \",\" \n"
-                    );
+                 Message("-> NO.$lineno: code >>> ",
+                     "$line",
+                     " space error on both sides of the \",\" \n"
+                     );
             }
         }
 
         # 检测 else 上面是否有一个空行
         if($line =~ /^function/){
             if($line_1 !~ /^\n/){
-                Message("-> NO.$lineno: code >>> ",
-                    "$line",
-                    " it has no 2 blank line above function\n"
-                    );
+                 Message("-> NO.$lineno: code >>> ",
+                     "$line",
+                     " it has no 2 blank line above function\n"
+                     );
 
             }else{
                 if($line_2 !~ /^\n/){
-                    Message("-> NO.$lineno: code >>> ",
-                        "$line",
-                        " it has no 2 blank line above function\n"
-                        );
+                     Message("-> NO.$lineno: code >>> ",
+                         "$line",
+                         " it has no 2 blank line above function\n"
+                         );
 
                 }else{
                     if($line_3 =~ /^\n/){
-                        Message("-> NO.$lineno: code >>> ",
-                            "$line",
-                            " it has too many blank line above function\n"
-                            );
+                         Message("-> NO.$lineno: code >>> ",
+                             "$line",
+                             " it has too many blank line above function\n"
+                             );
                     }
                 }
             }
@@ -77,17 +95,17 @@ for my $file (@ARGV) {
         # 检测 else 上面是否有一个空行
         if($line =~ /else/){
             if($line_1 !~ /^\n/){
-                Message("-> NO.$lineno: code >>> ",
-                    "$line",
-                    " it has no blank line above else\n"
-                    );
+                 Message("-> NO.$lineno: code >>> ",
+                     "$line",
+                     " it has no blank line above else\n"
+                     );
 
             }else{
                 if($line_2 =~ /^\n/){
-                    Message("-> NO.$lineno: code >>> ",
-                        "$line",
-                        " it has too many blank line\n"
-                        );
+                     Message("-> NO.$lineno: code >>> ",
+                         "$line",
+                         " it has too many blank line\n"
+                         );
                 }
             }
         }
@@ -95,10 +113,10 @@ for my $file (@ARGV) {
         # 检查（）的边缘是否有空格
         if($line =~ /\(( *).+( *)\)/){
             if(length($1) != 0 || length($2) != 0){
-                Message("-> NO.$lineno: code >>> ",
-                    "$line",
-                    " there is extra space around the brackets\n"
-                    );
+                 Message("-> NO.$lineno: code >>> ",
+                     "$line",
+                     " there is extra space around the brackets\n"
+                     );
             }        
         }
 
@@ -106,10 +124,10 @@ for my $file (@ARGV) {
         if($line =~ /(\s*)(==|=|>=|<=|>|<|\+|\*|\/|_=|~=)(\s*)/){
             if(length($1) != 1 || length($3) != 1){
                 # print "left: ".length($1).", right: ".length($2)."\n";
-                Message("-> NO.$lineno: code >>> ",
-                    "$line",
-                    " space error on both sides of the special symbol \"$2\"\n"
-                    );
+                 Message("-> NO.$lineno: code >>> ",
+                     "$line",
+                     " space error on both sides of the special symbol \"$2\"\n"
+                     );
             }        
         }
 
@@ -117,33 +135,38 @@ for my $file (@ARGV) {
         #检测 - 号
         if($line =~ /.*(\s*)((?<!-)-(?!-))(\s*).*/){        
             if(length($1) != 1 && length($3) != 1){
-                Message("-> NO.$lineno: code >>> ",
-                    "$line",
-                    " space error on both sides of the special symbol \"-\"\n"
-                    );
+                 Message("-> NO.$lineno: code >>> ",
+                     "$line",
+                     " space error on both sides of the special symbol \"-\"\n"
+                     );
             }        
         }
 
         #检测每行尾部有没有无效的空格
         if($line =~ /(\s+)[\r]?\n$/){
-            Message("-> NO.$lineno: code >>> ",
-                "$line",
-                " found unnecessary tail space\n"
-                );
+             Message("-> NO.$lineno: code >>> ",
+                 "$line",
+                 " found unnecessary tail space\n"
+                 );
         }
 
         # 检测每行字符是否超过80个字符
         if(length($line) > 80){
-            Message("-> NO.$lineno: code >>> ",
-                "$line",
-                " this line too long exceed 80 characters\n"
-                );
+             Message("-> NO.$lineno: code >>> ",
+                 "$line",
+                 " this line too long exceed 80 characters\n"
+                 );
         }
 
         $line_3 = $line_2;
         $line_2 = $line_1;
         $line_1 = $line;
-		
+        
+        # if ($comment eq "--") {
+        #     print($line);
+        # } else {
+        #     print($line."--".$arr_spl[1]);
+        # }
 	}
 
 }
@@ -153,6 +176,8 @@ if($err == 0){
 }
 
 sub Message(@){
+    
+
     my($numline, $code, $messages) = @_;
     if($numline =~ />>>/){
         $err = 1;

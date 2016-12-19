@@ -14,5 +14,13 @@ perl
 lua-style.pl
 --- code
 local x = 1  --hello
---- verify
-local x = 1  -- hello
+
+
+=== TEST 1: test1
+
+--- interpreter
+perl
+--- program
+lua-style.pl
+--- code
+local x = 3  -- hello
