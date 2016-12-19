@@ -16,7 +16,7 @@ lua-style.pl
 local x = 1  --hello
 
 
-=== TEST 1: test1
+=== TEST 2: test2
 
 --- interpreter
 perl
