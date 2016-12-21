@@ -1,7 +1,6 @@
 use lib 'lib';
 use Test::Validator::BaseLib 'no_plan';
 
-
 $ENV{INTERPRETER} = "perl";
 $ENV{PROGRAM} = "lua-style.pl";
 
