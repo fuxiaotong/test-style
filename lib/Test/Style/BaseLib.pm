@@ -1,17 +1,17 @@
 package Test::Style::BaseLib;
 
-use lib 'lib';
-use lib 'inc';
+# use lib 'lib';
+# use lib 'inc';
 
 use Test::Base -Base;
 
-use Test::Style::Util;
+# use Test::Style::Util;
 
 use File::Temp qw( tempfile );
 use IPC::Run ();
 
 use Data::Dumper;
-use base 'Exporter';
+# use base 'Exporter';
 
 our @EXPORT = qw(
     run_test
@@ -51,9 +51,9 @@ sub run_block($) {
     my $block = shift;
     my $timeout = $block->timeout || 10;
     
-    my $interpreter = $block->interpreter; 
+    my $interpreter = $ENV{INTERPRETER}; 
     
-    my $program = $block->program;
+    my $program = $ENV{PROGRAM};
     
     my $cmd = "$interpreter $program";
     
@@ -83,14 +83,11 @@ sub run_block($) {
     };
 
     # print $out;
-    if ($out =~ /ALL SUCCESS/) {
-        $out = "validation passed";
+    
+    if (defined $block->verify) {
+        is $out, $block->verify, "$name - stdout eq okay";
     }
-    # if (defined $block->verify) {
-    #     is $out, $block->verify, "$name - stdout eq okay";
-    # }
 
-    is $out, "validation passed", "$name - stdout eq okay";
 }
 
 
@@ -99,4 +96,4 @@ sub run_block($) {
 
 __END__
 
-none
+NO CONTENT

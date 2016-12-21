@@ -2,25 +2,23 @@ use lib 'lib';
 use Test::Style::BaseLib 'no_plan';
 
 
+$ENV{INTERPRETER} = "perl";
+$ENV{PROGRAM} = "lua-style.pl";
+
 run_test();
 
 __DATA__
 
 === TEST 1: test1
 
---- interpreter
-perl
---- program
-lua-style.pl
 --- code
-local x = 1  --hello
-
+local x = 1  --set x = 1
+--- verify
+local x = 1  -- set x = 1
 
 === TEST 2: test2
 
---- interpreter
-perl
---- program
-lua-style.pl
 --- code
-local x = 3  -- hello
+local x=3  -- set x = 1
+--- verify
+local x = 3  -- set x = 1
