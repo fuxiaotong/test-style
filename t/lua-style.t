@@ -1,5 +1,5 @@
 use lib 'lib';
-use Test::Style::BaseLib 'no_plan';
+use Test::Validator::BaseLib 'no_plan';
 
 
 $ENV{INTERPRETER} = "perl";

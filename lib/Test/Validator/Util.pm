@@ -1,4 +1,4 @@
-package Test::Style::Util;
+package Test::Validator::Util;
 
 use strict;
 use warnings;

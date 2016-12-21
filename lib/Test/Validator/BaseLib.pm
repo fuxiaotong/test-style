@@ -1,11 +1,11 @@
-package Test::Style::BaseLib;
+package Test::Validator::BaseLib;
 
 # use lib 'lib';
 # use lib 'inc';
 
 use Test::Base -Base;
 
-# use Test::Style::Util;
+# use Test::Validator::Util;
 
 use File::Temp qw( tempfile );
 use IPC::Run ();
