@@ -17,6 +17,6 @@ $prove -v t/*
 
 LICENSE
 -------
-test-style is released under the [MIT License](https://opensource.org/licenses/MIT)
+test-validator is released under the [MIT License](https://opensource.org/licenses/MIT)
 
 
