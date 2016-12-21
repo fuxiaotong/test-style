@@ -17,6 +17,6 @@ $prove -v t/*
 
 LICENSE
 -------
-test-validator is released under the [MIT License](https://opensource.org/licenses/MIT)
+test-validator is released under the [MIT License](https://opensource.org/licenses/MIT).
 
 
