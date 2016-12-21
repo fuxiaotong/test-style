@@ -10,7 +10,7 @@ use Test::Base -Base;
 use File::Temp qw( tempfile );
 use IPC::Run ();
 
-use Data::Dumper;
+# use Data::Dumper;
 # use base 'Exporter';
 
 our @EXPORT = qw(
